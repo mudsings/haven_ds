@@ -16,7 +16,6 @@
 inherit LIB_DAEMON;
 
 static void eventReap() {
-
     call_out((: eventReap :), 300);
     reap_dummies();
     reap_other();
@@ -26,5 +25,20 @@ static void create() {
     daemon::create();
     SetNoClean(1);
     call_out((: eventReap :), 300);
+    set_heart_beat(5);
+}
+
+static void heart_beat(){
+#ifdef __FLUFFOS__
+    if(sizeof(get_garbage()) > 20000){
+        reap_other();
+    }
+#endif
+}
+
+int eventDestruct(){
+    if( !((int)master()->valid_apply(({ "SECURE" }))) )
+        error("Illegal attempt to destruct reaper: "+get_stack()+" "+identify(previous_object(-1)));
+    return ::eventDestruct();
 }
 
