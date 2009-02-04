@@ -7,11 +7,13 @@ inherit LIB_DAEMON;
 mapping MapMap, MapCache;
 static int caching = 0;
 
-    void create(){
-        if( file_size( SAVE_MAP __SAVE_EXTENSION__ ) > 0 )
-            unguarded( (: restore_object, SAVE_MAP, 1 :) );
-        set_heart_beat(300);
-    }
+void create(){
+#if WIZMAP
+    if( file_size( SAVE_MAP __SAVE_EXTENSION__ ) > 0 )
+        unguarded( (: restore_object, SAVE_MAP, 1 :) );
+    set_heart_beat(300);
+#endif
+}
 
 void zero(){
     MapMap = ([]);
@@ -46,13 +48,18 @@ int GetCaching(){
     return caching;
 }
 
-varargs mixed GetMap(mixed args, int size) {
+varargs mixed GetMap(mixed args, int size){
+#if WIZMAP
     string ret = "";
     int i,x,line,tempy,tmpres, res = size;
     mapping Lines = ([]);
     mapping myspot;
     string mycoords;
     mapping start;
+    if(!(MASTER_D->GetPerfOK())){
+        return ret;
+    }
+    //else tc("huh? "+ MASTER_D->GetPerformanceScore());
     //tc(identify(previous_object())+" asked for a map of "+identify(args),"cyan");
     if(!args) args = base_name(environment(this_player()));
     if(objectp(args)) args = base_name(args);
@@ -216,5 +223,9 @@ varargs mixed GetMap(mixed args, int size) {
 #endif
     MapCache[mycoords] = ret;
     return ret; 
+#else
+    /* Wizmapping not enabled in config.h */
+    return "";
+#endif
 }
 
