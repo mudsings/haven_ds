@@ -12,9 +12,13 @@
 inherit LIB_DAEMON;
 
 mixed cmd(string args) {
-    string file = read_file(DIR_LOGS "/enter");
+    string file, filename;
     string array lines;
     int x = to_int(args);
+
+    if(archp(this_player())) filename = DIR_SECURE_LOGS + "/enter";
+    else filename = DIR_LOGS + "/enter";
+    file = read_file(filename);
 
     if( file ) {
         lines = explode(file, "\n");
@@ -33,7 +37,7 @@ mixed cmd(string args) {
         }
     }
     if( !sizeof(lines) ) {
-        previous_object()->eventPrint(DIR_LOGS "/enter is empty.", MSG_SYSTEM);
+        previous_object()->eventPrint(filename+" is empty.", MSG_SYSTEM);
     }
     else {
         previous_object()->eventPage(lines, MSG_SYSTEM);

@@ -1,4 +1,5 @@
 #include <lib.h>
+#include <daemons.h>
 
 inherit LIB_DAEMON;
 
