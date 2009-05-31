@@ -1,15 +1,11 @@
-#ifdef __DGD__
-#define keys(X) map_indices(X)
-#endif
+mapping reply, notes;
 
 string mssp_reply(){
-    mapping reply, notes;
     string *k;
     int i;
     string ret;
 
     reply = ([
-#ifdef __DSLIB__
             "NAME"             : mud_name(),
             "PLAYERS"          : itoa(sizeof(users())),
             "UPTIME"           : itoa(time() - uptime()),
@@ -19,19 +15,11 @@ string mssp_reply(){
             "WHO"              : implode(map(filter(users(),
             (: (environment($1) && !($1->GetInvis())) :)), 
             (: $1->GetCapName():)), "\t"),
-#else
-            "NAME"             : "Generic LP Mud",
-            "PLAYERS"          : "0",
-            "UPTIME"           : "0",
-            "PORT"             : "8000",
-            "CODEBASE"         : "Dead Souls 2.9",
-            "CONTACT"          : "cratylus@comcast.net",
-#endif
             "HOSTNAME"         : "dead-souls.net",
             "DESCRIPTION"      : "A fun mud!",
             "CREATED"          : "2006",
             "ICON"             : "http://lpmuds.net/favicon.ico",
-            "IP"               : "66.197.134.110",
+            "IP"               : query_intermud_ip(),
             "LANGUAGE"         : "English",
             "LOCATION"         : "United States",
             "MINIMUM AGE"      : "13",
@@ -134,3 +122,16 @@ string mssp_reply(){
     return ret;
 }
 
+mapping mssp_map(){
+    string text = mssp_reply();
+    mapping ret = ([]), tmp = add_maps(reply, notes);
+    foreach(mixed key, mixed val in tmp){
+        if(undefinedp(val)) continue;
+        if(grepp(val, "\t")){
+            ret[key] = explode(val, "\t");
+        }
+        else ret[key] = val;
+    }
+    return ret;
+}
+    

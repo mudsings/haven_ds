@@ -1,5 +1,6 @@
 #include <lib.h>
 #include <daemons.h>
+#include <commands.h>
 #include <message_class.h>
 
 inherit LIB_DAEMON;
@@ -32,7 +33,7 @@ varargs string *Prettify(string *arr, string chan){
 mixed cmd(string args) {
     string *talks, *ret = ({});
     int i, lines;
-    string log_contents;
+    string log_contents, location;
     gfile = "";
 
     if(!args){ 
@@ -43,7 +44,7 @@ mixed cmd(string args) {
     this_player()->eventPrint("Retrieving history...\n");
 
     if(!strsrch(args, "tell")){
-        load_object("/secure/cmds/players/tell")->cmd("hist");
+        load_object(CMD_TELL)->cmd("hist");
         return 1;
     }
 
@@ -78,7 +79,13 @@ mixed cmd(string args) {
     if(!CHAT_D->GetListening(this_player(), gfile)){
         return "You are not listening to channel: "+gfile;
     }
-    if( !(log_contents = read_file(DIR_CHANNEL_LOGS +"/"+ gfile)) ){
+    if(gfile == "admin"){
+        location = "/secure/log/admin";
+    }
+    else {
+        location = DIR_CHANNEL_LOGS +"/"+ gfile;
+    }
+    if( !(log_contents = read_file(location)) ){
         return CHAT_D->cmdLast(gfile);
     }
     if(lines > 100 && !creatorp(this_player())) lines = 100;
