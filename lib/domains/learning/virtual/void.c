@@ -1,8 +1,9 @@
 #include <lib.h>
 #include <dirs.h>
-#include ROOMS_H
+#include <rooms.h>
 #include <virtual.h>
 #include <position.h>
+#define __DIR__ "/domains/learning/virtual/"
 
 inherit LIB_VIRT_LAND;
 
