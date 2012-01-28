@@ -43,3 +43,7 @@ intellectual property.
 
 - Bill Sanchez aka Cratylus @ Dead Souls, aka Cratylus @ Frontiers
 November 2007
+
+This distribution is forked under permission from Cratylus/Bill Sanchez for the creation of an Open Mud.
+
+This means the source code of the MUD will be available as open source, under the license above.
