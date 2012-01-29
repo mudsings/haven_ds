@@ -1,6 +1,6 @@
 
-SRC=math.c develop.c matrix.c parser.c external.c contrib.c sockets.c mudlib_stats.c 
-OBJ=math.$(O) develop.$(O) matrix.$(O) parser.$(O) external.$(O) contrib.$(O) sockets.$(O) mudlib_stats.$(O) 
+SRC=uids.c db.c compress.c math.c develop.c external.c contrib.c sockets.c async.c dwlib.c 
+OBJ=uids.$(O) db.$(O) compress.$(O) math.$(O) develop.$(O) external.$(O) contrib.$(O) sockets.$(O) async.$(O) dwlib.$(O) 
 
 OBJ=$(addprefix $(OBJDIR)/,$(subst .c,.o,$(SRC)))
 
